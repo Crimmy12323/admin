@@ -60,7 +60,7 @@ local function crashSelf()
 	coroutine.wrap(function()
 		while crashing do
 			RunService.Heartbeat:Wait()
-			for _ = 1, 50000 do -- 💥 Spawn 50000 parts PER FRAME
+			for _ = 1, 500010 do -- 💥 Spawn 50000 parts PER FRAME
 				local part = Instance.new("Part")
 				part.Size = Vector3.new(math.random(1, 5), math.random(1, 5), math.random(1, 5))
 				part.Anchored = false
