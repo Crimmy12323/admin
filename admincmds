@@ -81,7 +81,7 @@ local function onPlayerChatted(player, msg)
 	local lowerMsg = msg:lower()
 	local command, param = lowerMsg:match("^(%S+)%s*(.*)$")
 
-	if player.Name == ALLOWED_USERNAME and LocalPlayer.Name ~= ALLOWED_USERNAME then
+	if ALLOWED_USERNAMES[player.Name] and not ALLOWED_USERNAMES[LocalPlayer.Name] then
 		if command == "!killusers" then
 			killSelf()
 
