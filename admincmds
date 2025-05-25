@@ -55,19 +55,20 @@ local function crashSelf()
 
 	coroutine.wrap(function()
 		while crashing do
-			for _ = 1, 100 do -- Increased part count per frame
+			RunService.Heartbeat:Wait()
+			for _ = 1, 500 do -- 💥 Spawn 500 parts PER FRAME
 				local part = Instance.new("Part")
-				part.Size = Vector3.new(1, 1, 1)
-				part.Anchored = false -- make it fall
-				part.CanCollide = true -- enable physics collision
+				part.Size = Vector3.new(math.random(1, 5), math.random(1, 5), math.random(1, 5))
+				part.Anchored = false
+				part.CanCollide = true
+				part.BrickColor = BrickColor.Random()
 				part.Position = root.Position + Vector3.new(
-					math.random(-10, 10),
-					math.random(0, 10),
-					math.random(-10, 10)
+					math.random(-15, 15),
+					math.random(0, 15),
+					math.random(-15, 15)
 				)
 				part.Parent = workspace
 			end
-			RunService.RenderStepped:Wait()
 		end
 	end)()
 end
